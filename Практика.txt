@@ -1,0 +1,34 @@
+========================UPDATE SET
+T3:Напишите SQL-запрос, чтобы поменять все 'f''m' и значения (т.е. Изменить все 'f' значения для 'm' и наоборот) /n
+с единый отчет об обновлении и никаких промежуточных временных таблиц.
+
+UPDATE Salary
+SET sex = (CASE WHEN sex = 'f' THEN 'm' ELSE 'f' END)
+
+=======================Delete from
+T3:Напишите SQL-запрос, чтобы удалить все повторяющиеся электронные письма, сохранив только одно уникальное электронное письмо с наименьшим idразмером. 
+Обратите внимание, что вы должны написать DELETEзаявление, а не SELECTодно.
+После запуска вашего скрипта ответ будет представлен в Personтаблице. Драйвер сначала скомпилирует и запустит ваш фрагмент кода, а затем покажет Personтаблицу. 
+Окончательный порядок Personтаблицы не имеет значения.
+Формат результата запроса приведен в следующем примере.
+
+delete starttable from person starttable, person endtable
+where starttable.email=endtable.email and starttable.id>endtable.id
+
+Объяснение:создаются 2 таблицы иp исходной.С помощью from tableName_1,table_Name_2.Дальше используются переменные для сравнения.
+
+===================BackUp(копирование таблиц)
+select * into new_table_name
+from table_name
+
+create new_table_name as 
+select * from table_name
+
+
+==================Рандомайзер с границами
+create or replace function randomaizer(low_gran int,high_gran int) returns int as $$
+begin
+	return floor(random() *(high_gran-low_gran+1)+low_gran);
+end;
+$$ language plpgsql;
+
