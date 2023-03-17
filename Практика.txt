@@ -1,0 +1,89 @@
+========================UPDATE SET
+T3:Напишите SQL-запрос, чтобы поменять все 'f''m' и значения (т.е. Изменить все 'f' значения для 'm' и наоборот) /n
+с единый отчет об обновлении и никаких промежуточных временных таблиц.
+
+UPDATE Salary
+SET sex = (CASE WHEN sex = 'f' THEN 'm' ELSE 'f' END)
+
+=======================Delete from
+T3:Напишите SQL-запрос, чтобы удалить все повторяющиеся электронные письма, сохранив только одно уникальное электронное письмо с наименьшим idразмером. 
+Обратите внимание, что вы должны написать DELETEзаявление, а не SELECTодно.
+После запуска вашего скрипта ответ будет представлен в Personтаблице. Драйвер сначала скомпилирует и запустит ваш фрагмент кода, а затем покажет Personтаблицу. 
+Окончательный порядок Personтаблицы не имеет значения.
+Формат результата запроса приведен в следующем примере.
+
+delete starttable from person starttable, person endtable
+where starttable.email=endtable.email and starttable.id>endtable.id
+
+Объяснение:создаются 2 таблицы иp исходной.С помощью from tableName_1,table_Name_2.Дальше используются переменные для сравнения.
+
+===================BackUp(копирование таблиц)
+select * into new_table_name
+from table_name
+
+create new_table_name as 
+select * from table_name
+
+
+==================Рандомайзер с границами
+create or replace function randomaizer(low_gran int,high_gran int) returns int as $$
+begin
+	return floor(random() *(high_gran-low_gran+1)+low_gran);
+end;
+$$ language plpgsql;
+
+
+===================================SUBSTRING
+SUBSTRING ( expression-имя колонки ,start индекс, length длина)
+ТЗ:
+Input: 
+Users table:
++---------+-------+
+| user_id | name  |
++---------+-------+
+| 1       | aLice |
+| 2       | bOB   |
++---------+-------+
+Output: 
++---------+-------+
+| user_id | name  |
++---------+-------+
+| 1       | Alice |
+| 2       | Bob   |
++---------+-------+
+
+Решение:
+select user_id,concat (upper(substr(name,1,1)),lower(substr(name,2))) as name
+from users
+order by user_id  
+
+==================================GROUP CONCAT
+GROUP_CONCAT(поле SEPARATOR разделитель)
+ТЗ:--не мог вывести 3 таблицу корректно 
+Input: 
+Activities table:
++------------+------------+
+| sell_date  | product     |
++------------+------------+
+| 2020-05-30 | Headphone  |
+| 2020-06-01 | Pencil     |
+| 2020-06-02 | Mask       |
+| 2020-05-30 | Basketball |
+| 2020-06-01 | Bible      |
+| 2020-06-02 | Mask       |
+| 2020-05-30 | T-Shirt    |
++------------+------------+
+Output: 
++------------+----------+------------------------------+
+| sell_date  | num_sold | products                     |
++------------+----------+------------------------------+
+| 2020-05-30 | 3        | Basketball,Headphone,T-shirt |
+| 2020-06-01 | 2        | Bible,Pencil                 |
+| 2020-06-02 | 1        | Mask                         |
++------------+----------+------------------------------+
+
+select sell_date, count(distinct(product)) as num_sold,GROUP_CONCAT( DISTINCT product order by product ASC separator ',' ) as products
+from Activities
+group by sell_date
+
+
